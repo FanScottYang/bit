@@ -9,11 +9,11 @@ public class Main {
 	public static void main(String[] args) {
 		try (Scanner cin = new Scanner(new BufferedInputStream(System.in))) {
 			int n, m;
-			int start, end, result;
+			int start, end;
 			List<Integer> path;
 			n = cin.nextInt();
 			for (int i = 0; i < n; i++) {
-				start = end = result = 0;
+				start = end = 0;
 				path = new ArrayList<Integer>();
 				// 输入
 				m = cin.nextInt();
@@ -27,55 +27,51 @@ public class Main {
 
 				// 计算
 				path.add(start);
-				result = calculate(start, end, m, path, 0, 0);
-				System.out.println(result);
+				calculate(start, end, m, path, 0, 0);
+				System.out.println(path.size()-1);
 				printPath(path, m);
 			}
 		}
 	}
 
-	private static int calculate(int start, int end, int length,
+	private static void calculate(int start, int end, int length,
 			List<Integer> path, int base, int index) {
-		int result = 0;
 		if (start == end) {
-			return 0;
+			return;
 		}
 
 		if (length == 1) {
 			path.add((int) (end * Math.pow(2, index)) + base);
-			return 1;
+			return;
 		}
 
 		while (start % 2 == end % 2) {
 			int tmp = start % 2;
 			start = start >> 1;
 			end = end >> 1;
+			base += tmp * Math.pow(2, index);
 			length--;
 			index++;
-			base += tmp * Math.pow(2, index);
 		}
 
 		if (length == 1) {
 			path.add((int) (end * Math.pow(2, index)) + base);
-			return 1;
+			return;
 		}
 
 		int tmp1 = start % 2;
 		int tmp2 = end % 2;
 		start = start >> 1;
 		end = end >> 1;
-		result += calculate(start, 1, length - 1, path, base + tmp1 * (int)Math.pow(2, index), index + 1);
+		calculate(start, 1, length - 1, path, base + tmp1 * (int)Math.pow(2, index), index + 1);
 		path.add((int) ((2+tmp2) * Math.pow(2, index)) + base);
-		result += calculate(1, end, length - 1, path, base + tmp1 * (int)Math.pow(2, index), index + 1);
-		result++;
+		calculate(1, end, length - 1, path, base + tmp2 * (int)Math.pow(2, index), index + 1);
 		index++;
-
-		return result;
 	}
 
 	private static void printPath(List<Integer> path, int length) {
 		for (int e : path) {
-			System.out.println(String.format("%"+length+"s", Integer.toBinaryString(e)).replace(' ', '0'));
+			System.out.println(String.format("%"+length+"s", Integer.toBinaryString(e)).replace(' ', 'D').replace('1','L').replace('0','D'));
 		}
 	}
 }
