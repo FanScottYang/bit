@@ -24,11 +24,12 @@ public class Main {
 							: 0;
 					end += endStr.charAt(j) == 'L' ? Math.pow(2, m - j - 1) : 0;
 				}
+
+				// 计算
 				path.add(start);
 				result = calculate(start, end, m, path, 0, 0);
-				path.add(end);
 				System.out.println(result);
-				printPath(path);
+				printPath(path, m);
 			}
 		}
 	}
@@ -55,29 +56,26 @@ public class Main {
 		}
 
 		if (length == 1) {
-			if (start == end) {
-				return 0;
-			} else {
-				path.add((int) (end * Math.pow(2, index)) + base);
-				return 1;
-			}
+			path.add((int) (end * Math.pow(2, index)) + base);
+			return 1;
 		}
 
-		int tmp = end % 2;
+		int tmp1 = start % 2;
+		int tmp2 = end % 2;
 		start = start >> 1;
 		end = end >> 1;
-		result += calculate(start, 1, length - 1, path, base, index + 1);
-		path.add((int) ((2+tmp) * Math.pow(2, index)) + base);
-		result += calculate(1, end, length - 1, path, base, index + 1);
+		result += calculate(start, 1, length - 1, path, base + tmp1 * (int)Math.pow(2, index), index + 1);
+		path.add((int) ((2+tmp2) * Math.pow(2, index)) + base);
+		result += calculate(1, end, length - 1, path, base + tmp1 * (int)Math.pow(2, index), index + 1);
 		result++;
 		index++;
 
 		return result;
 	}
 
-	private static void printPath(List<Integer> path) {
+	private static void printPath(List<Integer> path, int length) {
 		for (int e : path) {
-			System.out.println(e);
+			System.out.println(String.format("%"+length+"s", Integer.toBinaryString(e)).replace(' ', '0'));
 		}
 	}
 }
