@@ -27,9 +27,12 @@ public class Main {
 
 				// 计算
 				path.add(start);
+				long startTime = System.currentTimeMillis();
 				calculate(start, end, m, path, 0, 0);
 				System.out.println(path.size()-1);
 				printPath(path, m);
+				long endTime = System.currentTimeMillis();
+				System.out.println("total time usage: " + (endTime - startTime));
 			}
 		}
 	}
@@ -70,8 +73,10 @@ public class Main {
 	}
 
 	private static void printPath(List<Integer> path, int length) {
+		StringBuilder sb = new StringBuilder();
 		for (int e : path) {
-			System.out.println(String.format("%"+length+"s", Integer.toBinaryString(e)).replace(' ', 'D').replace('1','L').replace('0','D'));
+			sb.append(String.format("%"+length+"s\n", Integer.toBinaryString(e)).replace(' ', 'D').replace('1','L').replace('0','D'));
 		}
+		System.out.print(sb.toString());
 	}
 }
